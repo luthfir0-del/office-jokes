@@ -14,6 +14,15 @@ JOKE = (
 
 
 def main() -> None:
+    # Enforce the competition gate before writing: the entry must be a
+    # single non-blank line of 1-199 UTF-8 characters. Fail hard instead
+    # of silently emitting an entry the judge would reject.
+    if not (1 <= len(JOKE) <= 199):
+        raise ValueError(f"joke must be 1-199 characters, got {len(JOKE)}")
+    if "\n" in JOKE or "\r" in JOKE:
+        raise ValueError("joke must be a single line")
+    if not JOKE.strip():
+        raise ValueError("joke must not be only whitespace")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
